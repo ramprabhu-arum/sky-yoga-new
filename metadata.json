@@ -1,0 +1,6 @@
+{
+  "name": "SKY YOGA North America",
+  "description": "Simplified Kundalini Yoga North America - Experience the ancient science of physical vitality through focused movement, meditation, and expansive breath.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
