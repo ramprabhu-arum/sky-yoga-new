@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
 import { PageType } from '../components/Navbar';
-import { MapPin, Phone, Mail, Clock, Search, Send, CheckCircle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Search, Send, CheckCircle, ChevronDown, ChevronUp, ShieldCheck, MessageCircle, UserPlus, CreditCard, Users } from 'lucide-react';
+import { Reveal } from '../components/Reveal';
+
+// TODO: replace with the Zeffy registration form link
+const REGISTER_URL = 'https://www.zeffy.com/';
+
+// Sample offerings per center (to be confirmed by each center)
+const OFFER_ADULTS = 'In-person Adults Foundation Course';
+const OFFER_KIDS = 'Adults + Kids programs';
+const OFFER_WEEKLY = 'Weekly practices';
+const OFFER_GUIDANCE = 'Spiritual guidance';
+const centerOffers: Record<string, string[]> = {
+  'San Francisco Bay Area, CA': [OFFER_ADULTS, OFFER_KIDS, OFFER_WEEKLY, OFFER_GUIDANCE],
+  'Dallas – Fort Worth, TX': [OFFER_ADULTS, OFFER_KIDS, OFFER_WEEKLY],
+  'Greater Toronto Area, ON': [OFFER_ADULTS, OFFER_WEEKLY, OFFER_GUIDANCE],
+  'Seattle & Bellevue, WA': [OFFER_ADULTS, OFFER_WEEKLY],
+  'New York & New Jersey': [OFFER_ADULTS, OFFER_KIDS, OFFER_WEEKLY],
+  'Austin, TX': [OFFER_WEEKLY, OFFER_GUIDANCE],
+  'Greater Vancouver, BC': [OFFER_ADULTS, OFFER_KIDS, OFFER_WEEKLY],
+  'Chicago, IL': [OFFER_ADULTS, OFFER_WEEKLY, OFFER_GUIDANCE],
+};
 
 interface ContactPageProps {
   onNavigate: (page: PageType) => void;
@@ -187,7 +207,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               <Search className="w-4 h-4 text-[#6E6E73] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Filter by city, state, or location (e.g. San Jose, Dallas, Toronto)..."
+                placeholder="Search city or location..."
                 value={centerSearch}
                 onChange={(e) => setCenterSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-[#FDFBF7] rounded-xl border border-stone-200 text-xs md:text-sm focus:outline-none focus:border-[#D27D56]"
@@ -195,7 +215,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Centers List */}
-            <div className="space-y-3.5 max-h-[600px] overflow-y-auto pr-1">
+            <div className="space-y-3.5 lg:max-h-[600px] lg:overflow-y-auto lg:pr-1">
+
               {filteredCenters.length > 0 ? (
                 filteredCenters.map((c, i) => (
                   <div
@@ -214,18 +235,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
                     <p className="text-xs text-[#6E6E73]">{c.locations}</p>
 
+                    <div className="flex flex-wrap gap-1.5">
+                      {(centerOffers[c.city] || []).map((o) => (
+                        <span key={o} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E8EDE7] text-[#4f6a57] border border-[#4f6a57]/15">
+                          {o}
+                        </span>
+                      ))}
+                    </div>
+
                     <div className="pt-2 border-t border-stone-200/70 text-xs text-[#2D2825] space-y-1">
                       <p className="flex items-center gap-2 text-stone-600">
                         <Clock className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                         <span>{c.schedule}</span>
                       </p>
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-stone-500">
+                      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-4 gap-y-1 pt-1 text-stone-500">
                         <span>Lead: {c.coordinator}</span>
-                        <span>•</span>
-                        <a href={`mailto:${c.email}`} className="text-[#D27D56] hover:underline">
+                        <span className="hidden sm:inline">•</span>
+                        <a href={`mailto:${c.email}`} className="text-[#D27D56] hover:underline break-all">
                           {c.email}
                         </a>
-                        <span>•</span>
+                        <span className="hidden sm:inline">•</span>
                         <span>{c.phone}</span>
                       </div>
                     </div>
@@ -319,6 +348,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                       <option value="youth">Youth / Kids Yoga School</option>
                       <option value="corporate">Corporate & University Wellness</option>
                       <option value="volunteering">Volunteering & Master Training</option>
+                      <option value="feedback">Share Feedback</option>
                     </select>
                   </div>
 
@@ -350,6 +380,46 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Can't find a local center? Register */}
+      <section className="px-5 md:px-12 max-w-[1200px] mx-auto mb-20">
+        <Reveal>
+          <div className="rounded-3xl bg-[#2D2825] text-white p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-[#D27D56]/20 animate-float-slow" />
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <span className="text-xs uppercase tracking-widest text-[#E9A783] font-semibold">No center nearby?</span>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-3">Can’t find a local center? Register.</h2>
+                <p className="text-stone-300 leading-relaxed mb-6">
+                  Register with us and we will connect you with the right course, an online group, or a volunteer near you.
+                </p>
+                <a href={REGISTER_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#D27D56] hover:bg-[#b8653f] rounded-xl font-semibold transition-all hover:-translate-y-0.5 shadow-lg">
+                  Register here <Send className="w-4 h-4" />
+                </a>
+              </div>
+              <ol className="space-y-3">
+                {[
+                  { icon: UserPlus, t: 'Fill the registration form', d: 'Tell us a little about yourself.' },
+                  { icon: CreditCard, t: 'Complete payment', d: 'Secure online payment for your chosen course.' },
+                  { icon: MessageCircle, t: 'Join our WhatsApp group', d: 'You will be invited right after registration.' },
+                  { icon: Users, t: 'Our admin reaches out', d: 'A volunteer admin personally guides your next steps.' },
+                ].map((s, i) => {
+                  const Icon = s.icon;
+                  return (
+                    <li key={s.t} className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                      <span className="w-10 h-10 shrink-0 rounded-full bg-[#D27D56]/25 text-[#E9A783] flex items-center justify-center"><Icon className="w-5 h-5" /></span>
+                      <div>
+                        <p className="font-semibold text-sm"><span className="text-[#E9A783] font-mono mr-1.5">0{i + 1}</span>{s.t}</p>
+                        <p className="text-xs text-stone-400 mt-0.5">{s.d}</p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* Frequently Asked Questions Accordion */}

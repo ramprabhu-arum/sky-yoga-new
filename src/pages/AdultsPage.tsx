@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PageType } from '../components/Navbar';
-import { Calendar, Clock, MapPin, Check, ArrowRight, Sparkles, BookOpen, UserCheck, ShieldCheck } from 'lucide-react';
+import { Calendar, Clock, MapPin, Check, ArrowRight, Sparkles, BookOpen, UserCheck, ShieldCheck, ChevronDown, Dumbbell, Flame, Brain, Eye, GraduationCap, Sun } from 'lucide-react';
+import { Reveal } from '../components/Reveal';
 
 interface AdultsPageProps {
   onNavigate: (page: PageType) => void;
@@ -15,6 +16,27 @@ export const AdultsPage: React.FC<AdultsPageProps> = ({
 }) => {
   const [selectedFormat, setSelectedFormat] = useState<'all' | 'online' | 'in-person'>('all');
   const [activeCourseIndex, setActiveCourseIndex] = useState(0);
+  const [openOffering, setOpenOffering] = useState<number | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+
+  // Journey: SPE -> KK -> ... -> Divine Wisdom (intermediate steps are a draft; to be confirmed)
+  const journey = [
+    { abbr: 'SPE', title: 'Simplified Physical Exercises', icon: Dumbbell, text: 'Seven gentle practices that harmonize blood, heat, air, and bio-magnetism, preparing the body for deeper work.' },
+    { abbr: 'KK', title: 'Kayakalpa Yoga', icon: Flame, text: 'A 3-minute daily practice for cellular rejuvenation and conservation of vital energy.' },
+    { abbr: 'MED', title: 'Kundalini Meditation', icon: Brain, text: 'Agna, Shanti, and Thuriya meditations that calm the mind and awaken the life force.' },
+    { abbr: 'INT', title: 'Introspection', icon: Eye, text: 'Systematic analysis of thoughts, desires, anger, and worries to transform deep-seated patterns.' },
+    { abbr: 'DIP', title: 'Certificate → Diploma Programs', icon: GraduationCap, text: 'Structured study of Maharishi’s philosophy and science, from certificate to advanced diploma.' },
+    { abbr: 'DW', title: 'Divine Wisdom', icon: Sun, text: 'Self-realization and oneness with the cosmos — the culmination of the SKY journey.' },
+  ];
+
+  const offerings = [
+    { name: 'Foundation Course – Men and Women (Online)', price: '$60 per person', status: 'Open', details: 'Live online course for all who are new to SKY. Covers the Simplified Physical Exercises, Agna and Shanti meditation, and daily practice guidance.', course: 'Adults Foundation Course' },
+    { name: 'In-Center Foundation Course', price: 'Contact center for fee details', status: 'Per center', details: 'The same foundation course taught in person at your local SKY center. Fees and schedules vary by center.', course: 'In-Center Foundation Course' },
+    { name: 'Kayakalpa', price: '$35 per person', status: 'Registration open for next session', details: 'Learn the Kayakalpa practice for vitality, hormonal balance, and renewal. Foundation course is recommended before joining.', course: 'Kaya Kalpa Yoga' },
+    { name: 'Certificate Program (1 Year)', price: '$300 / year', status: 'Registration June – Aug', details: 'A one-year guided study of SKY philosophy and practice.', course: 'Certificate Program' },
+    { name: 'Diploma Program (1 Year)', price: '$300 / year', status: 'Registration June – Aug', details: 'A deeper one-year program building on the certificate level.', course: 'Diploma Program' },
+    { name: 'Advance Diploma Program (2 Years)', price: '$300 / year', status: 'Registration June – Aug', details: 'A two-year advanced program for dedicated practitioners and aspiring teachers.', course: 'Advance Diploma Program' },
+  ];
 
   const courses = [
     {
@@ -121,15 +143,49 @@ export const AdultsPage: React.FC<AdultsPageProps> = ({
         </p>
       </section>
 
+      {/* Offerings Intro: the SKY journey */}
+      <section className="px-5 md:px-12 max-w-[1200px] mx-auto mb-16">
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs uppercase tracking-wider text-[#D27D56] font-semibold">What is SKY?</span>
+            <h2 className="text-3xl md:text-4xl font-semibold text-[#2D2825] mt-2 mb-3">A Step-by-Step Journey to Divine Wisdom</h2>
+            <p className="text-sm md:text-base text-[#6E6E73]">SKY is a complete science of life. Each practice builds on the last — tap a step to explore it.</p>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3 relative mb-6">
+            {journey.map((step, i) => {
+              const Icon = step.icon;
+              const on = activeStep === i;
+              return (
+                <button
+                  key={step.abbr}
+                  onClick={() => setActiveStep(i)}
+                  className={`relative p-4 rounded-2xl border text-center transition-all cursor-pointer ${
+                    on ? 'bg-[#D27D56] text-white border-[#D27D56] shadow-lg -translate-y-1' : i <= activeStep ? 'bg-[#F0EBE1] border-[#D27D56]/40 text-[#2D2825]' : 'bg-white border-stone-200 text-[#2D2825] hover:border-[#D27D56]/40'
+                  }`}
+                >
+                  <Icon className="w-6 h-6 mx-auto mb-1.5" />
+                  <span className="text-xs font-bold tracking-wider">{step.abbr}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div key={activeStep} className="max-w-2xl mx-auto text-center p-6 rounded-2xl bg-[#FDFBF7] border border-[#2D2825]/10 shadow-sm animate-fade-in">
+            <p className="text-xs font-mono font-bold text-[#D27D56] mb-1">Step {activeStep + 1} of {journey.length}</p>
+            <h3 className="text-xl font-bold text-[#2D2825] mb-2">{journey[activeStep].title}</h3>
+            <p className="text-sm text-[#6E6E73] leading-relaxed">{journey[activeStep].text}</p>
+          </div>
+        </Reveal>
+      </section>
+
       {/* Featured Courses Tabs & Detailed Card */}
       <section className="px-5 md:px-12 max-w-[1200px] mx-auto mb-16">
         {/* Horizontal Navigation Tabs */}
-        <div className="flex gap-2.5 overflow-x-auto pb-4 mb-8 no-scrollbar">
+        <div className="flex flex-wrap gap-2.5 pb-4 mb-8">
           {courses.map((course, idx) => (
             <button
               key={course.id}
               onClick={() => setActiveCourseIndex(idx)}
-              className={`px-5 py-3 rounded-xl border font-semibold text-xs md:text-sm whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-4 md:px-5 py-2.5 md:py-3 rounded-xl border font-semibold text-xs md:text-sm text-left transition-all cursor-pointer ${
                 activeCourseIndex === idx
                   ? 'bg-[#D27D56] text-white border-[#D27D56] shadow-sm'
                   : 'bg-white text-[#2D2825] border-stone-200 hover:border-stone-300'
@@ -141,7 +197,7 @@ export const AdultsPage: React.FC<AdultsPageProps> = ({
         </div>
 
         {/* Selected Course Deep-Dive */}
-        <div className="bg-[#FDFBF7] rounded-3xl border border-[#2D2825]/10 p-8 md:p-12 shadow-sm animate-fade-in">
+        <div className="bg-[#FDFBF7] rounded-3xl border border-[#2D2825]/10 p-5 sm:p-8 md:p-12 shadow-sm animate-fade-in">
           <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
             <div className="w-full lg:w-7/12 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
@@ -230,6 +286,40 @@ export const AdultsPage: React.FC<AdultsPageProps> = ({
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Service offerings with pricing */}
+      <section className="px-5 md:px-12 max-w-[1200px] mx-auto mb-16">
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className="text-xs uppercase tracking-wider text-[#D27D56] font-semibold">Service Offerings</span>
+            <h2 className="text-3xl font-semibold text-[#2D2825] mt-1 mb-2">Programs &amp; Fees</h2>
+            <p className="text-sm text-[#6E6E73]">Choose the step that is right for you. Tap any program for details.</p>
+          </div>
+          <div className="space-y-3 max-w-3xl mx-auto">
+            {offerings.map((o, i) => (
+              <div key={o.name} className={`rounded-2xl border bg-[#FDFBF7] overflow-hidden transition-all ${openOffering === i ? 'border-[#D27D56]/60 shadow-md' : 'border-stone-200 hover:border-[#D27D56]/30'}`}>
+                <button onClick={() => setOpenOffering(openOffering === i ? null : i)} className="w-full p-4 sm:p-5 flex flex-wrap sm:flex-nowrap items-center gap-x-3 gap-y-1 sm:gap-4 text-left cursor-pointer" aria-expanded={openOffering === i}>
+                  <span className="text-xs font-mono font-bold text-[#D27D56] w-6">0{i + 1}</span>
+                  <div className="flex-1 min-w-[55%] sm:min-w-0">
+                    <p className="font-bold text-[#2D2825] text-sm md:text-base">{o.name}</p>
+                    <p className="text-xs text-[#6E6E73] mt-0.5">{o.status}</p>
+                  </div>
+                  <span className="order-last sm:order-none basis-full sm:basis-auto pl-9 sm:pl-0 text-sm font-bold text-[#D27D56] sm:text-right">{o.price}</span>
+                  <ChevronDown className={`w-4 h-4 text-stone-400 transition-transform ${openOffering === i ? 'rotate-180' : ''}`} />
+                </button>
+                {openOffering === i && (
+                  <div className="px-4 sm:px-5 pb-5 pt-1 sm:pl-[3.75rem] animate-fade-in">
+                    <p className="text-sm text-[#6E6E73] leading-relaxed mb-4">{o.details}</p>
+                    <button onClick={() => onOpenRegisterModal(o.course, 'Program')} className="px-5 py-2 bg-[#D27D56] text-white text-xs font-semibold rounded-lg hover:bg-[#b8653f] transition-all cursor-pointer">
+                      Register Interest →
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       {/* Daily Practice Structure (What a Practitioner Experience Looks Like) */}

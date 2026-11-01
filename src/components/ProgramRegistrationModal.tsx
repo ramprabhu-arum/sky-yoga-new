@@ -52,7 +52,7 @@ export const ProgramRegistrationModal: React.FC<ProgramRegistrationModalProps> =
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-lg bg-[#FDFBF7] rounded-2xl shadow-2xl border border-black/10 overflow-hidden flex flex-col"
+        className="relative w-full max-w-lg bg-[#FDFBF7] rounded-2xl shadow-2xl border border-black/10 overflow-hidden flex flex-col max-h-[92dvh]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#2D2825]/10 bg-[#F5F2ED]">
@@ -71,7 +71,7 @@ export const ProgramRegistrationModal: React.FC<ProgramRegistrationModalProps> =
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-5 sm:p-6 overflow-y-auto">
           {submitted ? (
             <div className="text-center py-6 space-y-4">
               <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">

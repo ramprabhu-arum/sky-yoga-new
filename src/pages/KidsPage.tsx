@@ -28,7 +28,7 @@ export const KidsPage: React.FC<KidsPageProps> = ({ onNavigate, onOpenRegisterMo
 
       {/* Hero Banner with the Kids Photo */}
       <section className="px-5 md:px-12 max-w-[1200px] mx-auto mb-16">
-        <div className="relative rounded-3xl overflow-hidden border border-[#2D2825]/10 shadow-sm aspect-[21/9] min-h-[300px]">
+        <div className="relative rounded-3xl overflow-hidden border border-[#2D2825]/10 shadow-sm min-h-[380px] md:min-h-[300px] md:aspect-[21/9]">
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{

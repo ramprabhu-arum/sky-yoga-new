@@ -138,11 +138,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose, onNav
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 sm:px-6 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:pt-20 px-4 sm:px-6 bg-black/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#FDFBF7] rounded-2xl shadow-2xl border border-black/10 overflow-hidden flex flex-col max-h-[80vh]"
+        className="relative w-full max-w-2xl bg-[#FDFBF7] rounded-2xl shadow-2xl border border-black/10 overflow-hidden flex flex-col max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-7rem)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}

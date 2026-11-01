@@ -91,6 +91,7 @@ export default function App() {
           <MissionPage
             onNavigate={(page) => handleNavigate(page)}
             onOpenGetStarted={() => setIsGetStartedModalOpen(true)}
+            onOpenVideo={() => setIsVideoModalOpen(true)}
           />
         )}
 
